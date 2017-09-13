@@ -1,0 +1,68 @@
+group 'coen280_hw3'
+
+buildscript {
+    dependencies {
+        classpath group: 'de.dynamicfiles.projects.gradle.plugins', name: 'javafx-gradle-plugin', version: '8.8.2'
+    }
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+}
+
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile files('libs/ojdbc6.jar')
+}
+
+jar {
+    baseName = 'populate'
+    manifest {
+        attributes(
+                'Class-Path': configurations.runtime.files.collect { "../libs/${it.name}" }.join(' '),
+                'Main-Class': 'coen280.data.Populate'
+        )
+    }
+}
+
+tasks.withType(Jar) {
+    destinationDir = file("$rootDir/build")
+}
+
+task run(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+
+    main = 'coen280.data.Populate'
+
+    // arguments to pass to the application
+    args '/Users/yangyang/Dropbox/COEN280/DB_HW3/hetrec2011-movielens-2k-v2/movies.dat',
+            '/Users/yangyang/Dropbox/COEN280/DB_HW3/hetrec2011-movielens-2k-v2/tags.dat',
+            '/Users/yangyang/Dropbox/COEN280/DB_HW3/hetrec2011-movielens-2k-v2/movie_actors.dat',
+            '/Users/yangyang/Dropbox/COEN280/DB_HW3/hetrec2011-movielens-2k-v2/movie_countries.dat',
+            '/Users/yangyang/Dropbox/COEN280/DB_HW3/hetrec2011-movielens-2k-v2/movie_directors.dat',
+            '/Users/yangyang/Dropbox/COEN280/DB_HW3/hetrec2011-movielens-2k-v2/movie_genres.dat',
+            '/Users/yangyang/Dropbox/COEN280/DB_HW3/hetrec2011-movielens-2k-v2/movie_tags.dat',
+            '/Users/yangyang/Dropbox/COEN280/DB_HW3/hetrec2011-movielens-2k-v2/user_taggedmovies-timestamps.dat'
+
+}
+
+apply plugin: 'javafx-gradle-plugin'
+
+jfx {
+    mainClass = 'coen280.gui.Hw3'
+    vendor = 'Yangyang'
+    appName = 'hw3'
+
+    jfxMainAppJarName = "hw3.jar"
+    jfxAppOutputDir = "build"
+    libFolderName = "libs"
+
+    //verbose = true
+    runJavaParameter = "-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005"
+}
