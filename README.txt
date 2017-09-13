@@ -1,7 +1,3 @@
-HW3 ReadMe
-Yangyang Pu
-W1284851
-
 Oracle DB config: src/main/resources/config.properties
 
 Compile
